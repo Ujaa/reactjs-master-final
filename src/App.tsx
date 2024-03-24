@@ -1,12 +1,17 @@
-import { Outlet } from "react-router-dom";
-import Header from "./components/Header";
 import { Helmet } from "react-helmet";
+import Header from "./components/global/Header";
+import { Outlet } from "react-router-dom";
+import Scene from "./components/3d/Scene";
+import { useRecoilValue } from "recoil";
+import { televisionClickedState } from "./atom";
 
 function App() {
+  const isClicked = useRecoilValue(televisionClickedState);
+
   return (
     <>
       <Helmet>
-        <title>Hi! This is Test!</title>
+        <title>Movies</title>
         <link rel="preconnect" href="https://fonts.googleapis.com"></link>
         <link rel="preconnect" href="https://fonts.gstatic.com"></link>
         <link
@@ -14,8 +19,8 @@ function App() {
           rel="stylesheet"
         ></link>
       </Helmet>
-      <Header />
-      <Outlet />
+      {isClicked! && <Header />}
+      {isClicked ? <Outlet /> : <Scene />}
     </>
   );
 }

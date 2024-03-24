@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { IAPIResponse, getPopular } from "../api";
 import { styled } from "styled-components";
-import Movie from "../components/Movie";
 import Movies from "../components/Movies";
 
 const Wrapper = styled.div`

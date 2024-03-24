@@ -2,31 +2,31 @@ import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { makeImagePath } from "../api";
 import {
+  Variants,
   motion,
   useMotionTemplate,
   useMotionValue,
   useMotionValueEvent,
   useTransform,
 } from "framer-motion";
+import { useSetRecoilState } from "recoil";
+import { selectedIdState } from "../atom";
 
 interface MovieProps {
   id: number;
   title: string;
   posterPath: string;
-  onClick: () => void;
 }
 
-const variants = {
-  normal: {
-    scale: 1,
-  },
-  hover: {
-    scale: 1.05,
+const movieVariants: Variants = {
+  start: { y: 50, opacity: 0 },
+  end: {
+    y: 0,
+    opacity: 1,
   },
 };
-
-const imageVariants = {
-  normal: {
+const imageVariants: Variants = {
+  initial: {
     scale: 1,
   },
   hover: {
@@ -41,9 +41,10 @@ const MovieItem = styled(motion.li)`
   overflow: hidden;
   width: 14rem;
   height: 20rem;
-  &:hover {
-    z-index: 10;
-  }
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 `;
 
 const Title = styled(motion.span)`
@@ -51,6 +52,7 @@ const Title = styled(motion.span)`
   z-index: 2;
   font-size: 2rem;
   color: white;
+  padding: 1.2rem;
 `;
 
 const Image = styled(motion.img)`
@@ -58,8 +60,13 @@ const Image = styled(motion.img)`
   object-fit: cover;
 `;
 
-function Movie({ id, title, posterPath, onClick }: MovieProps) {
+function Movie({ id, title, posterPath }: MovieProps) {
+  const setSelectedId = useSetRecoilState(selectedIdState);
   const [isHovered, setIsHovered] = useState(false);
+
+  const onClickMovie = () => {
+    setSelectedId(id);
+  };
 
   const handleHoverStart = () => {
     setIsHovered(true);
@@ -71,18 +78,16 @@ function Movie({ id, title, posterPath, onClick }: MovieProps) {
 
   return (
     <MovieItem
-      onClick={onClick}
       layoutId={id.toString()}
+      onClick={onClickMovie}
       onHoverStart={handleHoverStart}
       onHoverEnd={handleHoverEnd}
-      whileHover="hover"
-      initial="normal"
-      variants={variants}
+      variants={movieVariants}
     >
       {isHovered && <Title onHoverStart={handleHoverStart}>{title}</Title>}
       <Image
         whileHover="hover"
-        initial="normal"
+        initial="initial"
         variants={imageVariants}
         src={makeImagePath(posterPath)}
         alt={title}
