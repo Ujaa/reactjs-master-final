@@ -4,7 +4,6 @@ import {
   EffectComposer,
   Glitch,
 } from "@react-three/postprocessing";
-import { GlitchMode } from "postprocessing";
 import { Vector2 } from "three";
 
 function BasePostProcessing() {
@@ -14,7 +13,6 @@ function BasePostProcessing() {
         delay={new Vector2(0.5, 1.5)}
         duration={new Vector2(0.6, 1.0)}
         strength={new Vector2(0.05, 0.1)}
-        mode={GlitchMode.SPORADIC}
         active
         ratio={0.1}
       />
